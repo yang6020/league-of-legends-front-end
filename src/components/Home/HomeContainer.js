@@ -7,7 +7,8 @@ export default class HomeContainer extends Component {
     super(props)
     this.state = {
       user: {},
-      input: ''
+      input: '',
+      error: false
     }
   }
   componentDidMount() {
@@ -19,12 +20,16 @@ export default class HomeContainer extends Component {
   changeUser = event => {
     axios
       .get(`http://localhost:4300/users/${this.state.input}`)
-      .then(res => this.setState({ user: res.data }))
+      .then(res => {
+        this.setState({ user: res.data })
+      })
+      .catch(err => this.setState({ error: true }))
+
     event.preventDefault()
   }
 
   handleChange = event => {
-    this.setState({ input: event.target.value })
+    this.setState({ input: event.target.value, error: false })
   }
 
   render() {
@@ -32,6 +37,7 @@ export default class HomeContainer extends Component {
       <div>
         <Home
           user={this.state.user}
+          error={this.state.error}
           changeUser={this.changeUser}
           handleChange={this.handleChange}
         />
