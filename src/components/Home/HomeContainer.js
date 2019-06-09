@@ -6,7 +6,8 @@ export default class HomeContainer extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      user: {}
+      user: {},
+      input: ''
     }
   }
   componentDidMount() {
@@ -15,10 +16,25 @@ export default class HomeContainer extends Component {
       .then(res => this.setState({ user: res.data }))
   }
 
+  changeUser = event => {
+    axios
+      .get(`http://localhost:4300/users/${this.state.input}`)
+      .then(res => this.setState({ user: res.data }))
+    event.preventDefault()
+  }
+
+  handleChange = event => {
+    this.setState({ input: event.target.value })
+  }
+
   render() {
     return (
       <div>
-        <Home user={this.state.user} />
+        <Home
+          user={this.state.user}
+          changeUser={this.changeUser}
+          handleChange={this.handleChange}
+        />
       </div>
     )
   }
